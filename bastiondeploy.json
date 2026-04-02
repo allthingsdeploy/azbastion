@@ -3,52 +3,72 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "location": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": "australiaeast"
         },
         "resourceGroup": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": "RGAUEFAX"
         },
         "bastionHostName": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": "bastion-auex-vm"
         },
         "subnetId": {
-            "type": "string"
+            "type": "string",
+            "metadata": {
+                "description": "ID of AzureBastionSubnet in vnet-auex-vm"
+            }
         },
         "bastionHostSku": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": "Standard",
+            "allowedValues": ["Basic", "Standard"]
         },
         "bastionHostScaleUnits": {
-            "type": "int"
+            "type": "int",
+            "defaultValue": 2,
+            "minValue": 2
         },
         "enableIpConnect": {
-            "type": "bool"
+            "type": "bool",
+            "defaultValue": true
         },
         "enableTunneling": {
-            "type": "bool"
+            "type": "bool",
+            "defaultValue": true
         },
         "enableShareableLink": {
-            "type": "bool"
+            "type": "bool",
+            "defaultValue": false
         },
         "enableKerberos": {
-            "type": "bool"
+            "type": "bool",
+            "defaultValue": false
         },
         "disableCopyPaste": {
-            "type": "bool"
+            "type": "bool",
+            "defaultValue": false
         },
         "enableSessionRecording": {
-            "type": "bool"
+            "type": "bool",
+            "defaultValue": false
         },
         "enablePrivateOnlyBastion": {
-            "type": "bool"
+            "type": "bool",
+            "defaultValue": false
         },
         "zones": {
-            "type": "array"
+            "type": "array",
+            "defaultValue": ["1", "2", "3"]
         },
         "publicIpZones": {
-            "type": "array"
+            "type": "array",
+            "defaultValue": ["1", "2", "3"]
         },
         "publicIpAddressName": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": "pip-bastion-auex-vm"
         }
     },
     "resources": [
@@ -79,7 +99,7 @@
             },
             "location": "[parameters('location')]",
             "dependsOn": [
-                "[resourceId(parameters('resourceGroup'), 'Microsoft.Network/publicIpAddresses', parameters('publicIpAddressName'))]"
+                "[resourceId('Microsoft.Network/publicIpAddresses', parameters('publicIpAddressName'))]"
             ],
             "properties": {
                 "enableIpConnect": "[parameters('enableIpConnect')]",
@@ -96,11 +116,7 @@
                                 "id": "[parameters('subnetId')]"
                             },
                             "publicIPAddress": {
-                                "id": "[resourceId(parameters('resourceGroup'), 'Microsoft.Network/publicIpAddresses', parameters('publicIpAddressName'))]",
-                                "properties": {
-                                    "publicIPAllocationMethod": "Static",
-                                    "publicIPAddressVersion": "IPv4"
-                                }
+                                "id": "[resourceId('Microsoft.Network/publicIpAddresses', parameters('publicIpAddressName'))]"
                             }
                         }
                     }
